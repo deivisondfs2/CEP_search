@@ -1,5 +1,5 @@
 class ValidateError {
-  constructor(schemaErrors, error = 'validation_error', message = 'Some fields are not valid') {
+  constructor(schemaErrors, error = 'validation_error', message = 'CEP is invalid') {
     this.error = error;
     this.message = message;
     this.status = 400;

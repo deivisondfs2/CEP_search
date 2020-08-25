@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 const cepValidation = {
   cep: Yup.string()
-    .matches(/^[0-9]{8}$/, 'Must be exactly 8 digits')
+    .matches(/^[0-9]{8}$/, 'CEP invalid: Must be exactly 8 digits and only numbers')
     .required()
 };
 
