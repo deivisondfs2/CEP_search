@@ -6,13 +6,16 @@ import logger from 'morgan';
 import bodyParser from 'body-parser';
 import jwt from 'express-jwt';
 import JwksRsa from 'jwks-rsa';
+import swaggerUi from 'swagger-ui-express';
 
 import routes from './routes';
 import UnauthorizedError from './lib/errors/unauthorized-error';
+import swaggerDocument from './docs';
 
 class App {
   constructor() {
     this.app = express();
+    this.swagger();
     this.middlewares();
     this.routes();
   }
@@ -45,6 +48,10 @@ class App {
     this.app.use(routes);
     this.app.use(this.routerNotFound);
     this.app.use(this.errorHandler);
+  }
+
+  swagger() {
+    this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   }
 
   routerNotFound(req, res, next) {
