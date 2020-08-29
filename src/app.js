@@ -1,8 +1,11 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-unused-vars */
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
+import jwt from 'express-jwt';
+import JwksRsa from 'jwks-rsa';
 
 import routes from './routes';
 import UnauthorizedError from './lib/errors/unauthorized-error';
@@ -20,6 +23,22 @@ class App {
     this.app.use(express.urlencoded({ extended: false }));
     this.app.use(cookieParser());
     this.app.use(bodyParser.json());
+    this.app.use(this.checkJwt);
+  }
+
+  checkJwt(req, res, next) {
+    jwt({
+      secret: JwksRsa.expressJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
+        jwksUri: 'https://dev-deivison.us.auth0.com/.well-known/jwks.json'
+      }),
+
+      audience: 'http://localhost:8080/api/',
+      issuer: 'https://dev-deivison.us.auth0.com/',
+      algorithm: ['RS256']
+    })(req, res, next);
   }
 
   routes() {
