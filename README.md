@@ -24,6 +24,7 @@ node server.js
 # Docs
 
 1. [Folder structure](docs/Folder_Structure.md)
+2. [Authtication](docs/authentication.md)
 
 # Tools
 

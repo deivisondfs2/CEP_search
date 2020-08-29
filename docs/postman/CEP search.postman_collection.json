@@ -1,0 +1,138 @@
+{
+	"info": {
+		"_postman_id": "94b3e381-01ea-411b-953c-76650603aa9f",
+		"name": "CEP search",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get access token",
+			"item": [
+				{
+					"name": "Authorization Code",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "339b2b14-bc1c-49af-af1b-2f434c478ee1",
+								"exec": [
+									"function jwt_decode(jwt) {",
+									"    var parts = jwt.split('.'); // header, payload, signature",
+									"    return JSON.parse(atob(parts[1]));",
+									"}",
+									"",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);",
+									"",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"auth0_token\", jsonData.access_token);",
+									"",
+									"    let decodedData=jwt_decode(jsonData.access_token);",
+									"",
+									"    console.log(pm.environment.get(\"auth0_token\"));    ",
+									"    pm.environment.set(\"auth0_token_decoded\", jsonData.access_token);    ",
+									"",
+									"",
+									"    pm.environment.get(\"auth0_token_decoded\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "authorization_code",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{secret}}",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "lnnUsl2-8ohCymEa",
+									"type": "text"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "{{redirect_uri}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{auth0_domain}}/oauth/token",
+							"protocol": "https",
+							"host": [
+								"{{auth0_domain}}"
+							],
+							"path": [
+								"oauth",
+								"token"
+							]
+						},
+						"description": "This is the OAuth 2.0 grant that regular web apps utilize in order to access an API. Use this endpoint to exchange an Authorization Code for an Access Token."
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "CEP",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth0_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cep\": 22333999\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{base_url}}/api/v1/cep/",
+					"protocol": "http",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"cep",
+						""
+					]
+				},
+				"description": "This is the OAuth 2.0 grant that regular web apps utilize in order to access an API. Use this endpoint to exchange an Authorization Code for an Access Token."
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
