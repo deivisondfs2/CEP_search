@@ -21,7 +21,8 @@
 ### `controllers`
 Contains all controllers subdivided by folder containing their respective validation.<br />
 
-### `docs`
+
+### `docs` to access /api-docs
 Have a Swagger structure.
 
 ### `lib`
